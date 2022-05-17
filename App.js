@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -30,32 +30,61 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            let PlatformIos;
+            Platform.OS === "ios" ? (PlatformIos = "ios-") : (PlatformIos = "");
+            if (route.name === "Home") {
+              iconName = focused
+                ? PlatformIos + "home"
+                : PlatformIos + "home-outline";
+            } else if (route.name === "Details") {
+              iconName = focused
+                ? PlatformIos + "card-text"
+                : PlatformIos + "card-text-outline";
+            }
+
+            // You can return any component that you like here!
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size}
+                color={color}
+              />
+            );
+          },
+          tabBarActiveTintColor: "green",
+          tabBarInactiveTintColor: "gray",
+        })}
+      >
         <Tab.Screen
           name="Home"
           component={HomeScreen}
-          options={{
-            title: "Page d'accueil",
-            tabBarLabel: "Home",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
+          // options={{
+          //   title: "Page d'accueil",
+          //   tabBarLabel: "Home",
+          //   tabBarIcon: ({ color, size }) => (
+          //     <MaterialCommunityIcons name="home" color={color} size={size} />
+          //   ),
+          // }}
         />
+
         <Tab.Screen
           name="Details"
           component={SettingsScreen}
-          options={{
-            title: "Description",
-            tabBarLabel: "Description",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="card-text-outline"
-                color={color}
-                size={size}
-              />
-            ),
-          }}
+          // options={{
+          //   title: "Description",
+          //   tabBarLabel: "Description",
+          //   tabBarIcon: ({ color, size }) => (
+          //     <MaterialCommunityIcons
+          //       name="card-text-outline"
+          //       color={color}
+          //       size={size}
+          //     />
+          //   ),
+          // }}
         />
       </Tab.Navigator>
     </NavigationContainer>
